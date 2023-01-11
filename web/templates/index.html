@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body{
+            background: darkgray;
+        }
+        div.gallery {
+            border: 1px solid #ccc;
+        }
+
+        div.gallery:hover {
+            border: 1px solid #777;
+        }
+
+        div.gallery img {
+            width: 100%;
+            height: auto;
+        }
+
+        div.desc {
+            padding: 15px;
+            text-align: center;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .responsive {
+            padding: 0 6px;
+            float: left;
+            width: 24.99999%;
+        }
+
+        @media only screen and (max-width: 700px) {
+            .responsive {
+                width: 49.99999%;
+                margin: 6px 0;
+            }
+        }
+
+        @media only screen and (max-width: 500px) {
+            .responsive {
+                width: 100%;
+            }
+        }
+
+        .clearfix:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+        .menu {
+            padding: 5px;
+        }
+        .menu h2{
+            display: inline;
+        }
+    </style>
+    <title>AWS S3 : {{response['Name']}} {{response['ResponseMetadata']['HTTPHeaders']['x-amz-bucket-region']}}</title>
+</head>
+<body>
+
+<h1>AWS S3 : {{response['Name']}} {{response['ResponseMetadata']['HTTPHeaders']['x-amz-bucket-region']}}</h1>
+<div class="menu">
+    <h2><a href="/">Home</a></h2>
+    <h2><a href="{{ url_for('hello_world', next=response['NextContinuationToken']) | safe}}">Next</a></h2>
+</div>
+{% for image in response['Contents'] %}
+{% if image['Size'] > 0 %}
+    <div class="responsive">
+        <div class="gallery">
+          <a target="_blank" href="https://{{response['Name']}}.s3.{{response['ResponseMetadata']['HTTPHeaders']['x-amz-bucket-region']}}.amazonaws.com/{{image['Key']|escape}}">
+            <img src="https://{{response['Name']}}.s3.{{response['ResponseMetadata']['HTTPHeaders']['x-amz-bucket-region']}}.amazonaws.com/{{image['Key']|escape}}" alt="{{image['Key']}}" width="600" height="400">
+          </a>
+          <div class="desc">{{image['Key']|escape}}</div>
+        </div>
+      </div>
+{% endif %}
+{% endfor %}
+
+
+<div class="clearfix"></div>
+
+<div style="padding:6px;">
+    <h2><a href="/">Home</a></h2>
+    <h2><a href="{{ url_for('hello_world', next=response['NextContinuationToken']) | safe}}">Next</a></h2>
+</div>
+
+</body>
+</html>
