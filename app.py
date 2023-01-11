@@ -6,8 +6,8 @@ app = Flask(__name__, static_url_path='/static', static_folder='web/static', tem
 
 s3_client = boto3.client(
     's3',
-    aws_access_key_id = os.environ['S3_KEY'],
-    aws_secret_access_key = os.environ['S3_SECRET']
+    aws_access_key_id = os.environ['AWS_ACCESS_KEY_ID'],
+    aws_secret_access_key = os.environ['AWS_SECRET_ACCESS_KEY']
 )
 
 @app.route("/", methods=['GET', 'POST'])
